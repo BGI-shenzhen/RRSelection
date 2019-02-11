@@ -1,19 +1,20 @@
 
+
 # RRSelection
 <b>RRSelection:  A new simple and efficient software to detect selection region analysis based Variant Call Format</b>
   
-	RRSelection: A Llinkage disequilibrium method to detect selection region across  population VCF
+	RRSelection: A Llinkage disequilibrium method to detect selection region across population VCF
 
 ###  1) Install
 ------------
 
-<b> [Download](https://github.com/BGI-shenzhen/RRSelection/archive/v0.8.tar.gz) </b>
+<b> [Download](https://github.com/BGI-shenzhen/RRSelection/archive/v0.85.tar.gz) </b>
 
 </br>
 Method1 For <b>linux/Unix</b> and <b> macOS </b>
 <pre>
         git clone https://github.com/BGI-shenzhen/RRSelection.git
-        chmod 755 configure; ./configure;
+	cd RRSelection ;chmod 755 configure; ./configure;
         make;
         mv RRSelection  bin/;    #     [rm *.o]
 </pre>
@@ -33,23 +34,29 @@ Method2 For <b>linux/Unix</b> and <b> macOS </b>
 ###  2) Example
 ------------
 
-see more detailed Usage in the <b>[Documentation](https://github.com/BGI-shenzhen/RRSelection/blob/master/Manual.pdf)</b>
+see more detailed Usage in the <b>[Documentation](https://github.com/BGI-shenzhen/RRSelection/blob/master/Manual.txt)</b>
 
 * 1) Calculate sliding windows mean RR for one or two population,and give out the selection region. also give out the whole genome  RR plot figure. 
 <pre>
       # 1)  For all samples in one population 
-            ./bin/RRSelection   -InVCF SNP.vcf.gz -OutPut OutPrefix
+               ./bin/RRSelection   -InVCF SNP.vcf.gz  -OutPut OutPrefix
       # 2)  For same samples in one population
-			./bin/RRSelection   -InVCF SNP.vcf.gz -OutPut OutPrefix -SubGroup  subgroup.list  # subgroup.list is the sample name of this population
+	       ./bin/RRSelection   -InVCF SNP.vcf.gz  -OutPut OutPrefix  -SubGroup  subgroup.list  # subgroup.list is the sample name of this population
       # 3)  For Tow  population
-            ./bin/RRSelection   -InVCF SNP.vcf.gz -OutPut OutPrefix -SubGroup  subgroup.list  #  PopID : sample name list
+               ./bin/RRSelection   -InVCF SNP.vcf.gz  -OutPut OutPrefix  -SubGroup  subgroup.list  #  PopID : sample name list
 </pre>
 
-* 3) see the result  [OutPrefix.winRR.gz OutPrefix.selection.gz] and [OutPrefix.png OutPrefix.pdf]
+* 2) see the result  [OutPrefix.winRR.gz OutPrefix.selection.gz] and [OutPrefix.png OutPrefix.pdf]. ALso Run the perl script to regain the beautiful picture
+
+<pre>
+         perl     PlotRRSele.pl    -inFile   OutPrefix.winRR.gz  -output OutPrefix
+</pre>
+ 
+    
 
 ###  3) Introduction
 ------------
-To detect the selection region is the most important and most common analysis in the population resequencing. Here we introduce a new software :RRSelection, a simple-efficient software to detect the selection region analysis based Variant Call Format. Sliding whole genome windows to calculate every region mean R^2 for one or two population,  and pick out the high-chained region (one population) or the region with the greatest difference (two populations), which is regarded the selection region according to the top  distribution of measure MeanRR(Z-test Pvalue).
+To detect the selection region is the most important and most common analysis in the population resequencing. Here we introduce a new software :<b>RRSelection</b>, a simple-efficient software to detect the selection region analysis based Variant Call Format. Sliding whole genome windows to calculate every region mean R^2 for one or two population,  and pick out the high-chained region (one population) or the region with the greatest difference (two populations), which is regarded the selection region according to the top  distribution of measure MeanRR(Z-test Pvalue).
 
 
 * <b> Parameter description</b>
@@ -68,17 +75,17 @@ To detect the selection region is the most important and most common analysis in
                -Het        <float>   Max ratio of het allele filter [0.88]
                -Miss       <float>   Max ratio of miss allele filter [0.25]
 
-               -Pvalue     <float>   T-test Pvalue to pick out selection region[0.001]
+               -Pvalue     <float>   T-test Pvalue to pick out selection region[0.005]
                -KeepR                Keep Rscript used to modify and plots
 
-	       -help                 See more help [hewm2008 Beta v0.8]
+	       -help                 See more help [hewm2008 Beta v0.85]
 
 ```
 
 
 ###  4) Results
 ------------
-The Header of the result 
+The following  is the format of the result output file header .  and the Figure is no showed here.
 <pre>
 #Chr    Start   End     Mean_r^2_cul    Sum_r^2_cul     Count_cul       Mean_r^2_wild   Sum_r^2_wild    Count_wild      MeanRRDiff(cul-wild)    ZScore  Pvalue
 ##Group[cul], MeanRR:0.245096   SD:0.0529981    Effective windows Count:30
